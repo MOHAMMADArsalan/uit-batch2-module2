@@ -5,7 +5,8 @@ import Button from './components/Button/Button';
 import List from './components/List/List';
 import Counter from './components/Counter/Counter';
 import Counter2 from './components/Counter2/Counter';
-
+import Todo from "./components/Todo/Todo";
+import CountDown from "./components/CountDown/CountDown";
 
 // create new app
 // https://reactjs.org/docs/create-a-new-react-app.html
@@ -17,7 +18,7 @@ class App extends React.Component {
     this.state = {
       todos: [],
       input: '',
-      showCounter: false,
+      showCounter: true,
       hasError: false
     }
   }
@@ -54,7 +55,8 @@ class App extends React.Component {
     }
     return (
       <div className="container">
-        {this.state.showCounter ? <Counter2 /> : null}
+        <CountDown />
+        {/* {this.state.showCounter ? <Counter2 /> : null} */}
         {/* <h1 style={headingStyle} >Todo App</h1>
         <Input onInputChange={this.onInputChange}/>
         <br />
@@ -64,7 +66,7 @@ class App extends React.Component {
         <List todos={this.state.todos}/> */}
         {/* {this.state.hasError ? <h1>Error</h1>: ''}
         {this.state.showCounter ? <Counter /> : null} */}
-        <button onClick={this.toggleCounter}>Show / Hide Counter</button>
+        {/* <button onClick={this.toggleCounter}>Show / Hide Counter</button> */}
       </div>
     )
   }

@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 
+import useTitle from "../../hooks/useTitle";
+
+
 // componentWillUnmount ]
 // componentDidMount ] - useEffect
 //componentDidUpdate ]
@@ -10,21 +13,25 @@ const Counter = () => {
   const [count, setCount] = useState(100);
   const [doubleCount, setDoubleCount] = useState(100);
   const [inputValue, setInputValue] = useState('');
-
+  const updateTitle = useTitle("Counter App - " + count);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log("inside setinterval", count)
+      console.log("inside setinterval", count);
+
       setCount((currentCount) => {
-        return currentCount + 1
-      })
-    }, 1000)
+        if(currentCount % 2 === 0) {
+          updateTitle("Counter App - " + currentCount)
+        }
+        return currentCount + 1;
+      });
+    }, 1000);
     console.log("inside useEffect");
 
     return () => {
       clearInterval(interval);
-      console.log("component Unmount")
-    }
+      console.log("component Unmount");
+    };
   }, []); // empty dependencies array will run once
 
   useEffect(() => {
@@ -33,7 +40,7 @@ const Counter = () => {
 
   useEffect(() => {
     console.log("useEffect will run on every change");
-  })
+  });
   // const [count, setCount] = state;
   // const count = state[0];
   // const setCount = state[1];
@@ -43,7 +50,7 @@ const Counter = () => {
     setCount(newCount);
   };
   const onDoubleIncrement = () => {
-    setDoubleCount(count * 2)
+    setDoubleCount(count * 2);
 
   };
   const onInputChange = (event) => {
