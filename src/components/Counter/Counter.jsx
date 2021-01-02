@@ -23,13 +23,13 @@ class Counter extends Component {
       loading: true
     });
     axios.get(url)
-    .then((response) => { 
-      this.setState({
-        loading: false,
-        user: response.data
+      .then((response) => {
+        this.setState({
+          loading: false,
+          user: response.data
+        });
       })
-    })
-    .catch((error) => { console.log(error) });
+      .catch((error) => { console.log(error); });
   };
   componentDidMount () {
     //  this.interval = setInterval(() => {
@@ -94,17 +94,25 @@ class Counter extends Component {
       return <h2>Login Name: {this.state.user.login}</h2>;
     }
   }
+
+  shouldComponentUpdate(nextProps) {
+    if(nextProps.counter > 10) {
+      return false;
+    }
+    console.log(nextProps, this.props);
+    return true;
+  }
   render () {
     console.log('render');
     return (
       <div>
-        <input type="text" onChange={this.onInputChange} />
+        {/* <input type="text" onChange={this.onInputChange} />
         <button onClick={this.fetchGithubUser}>Get User</button>
 
-        {this.showUser()}
-        {/* <h1>Counter App</h1>
-
-        <p>Counter is {  this.showCounter(15) ? 'greater than or equal to' : 'less than' } 15 </p>
+        {this.showUser()} */}
+        <h1>Counter App</h1>
+        <h1>Count: {this.props.counter > 10 ? 10 : this.props.counter}</h1>
+        {/* <p>Counter is {  this.showCounter(15) ? 'greater than or equal to' : 'less than' } 15 </p>
         <p className={this.showCounter(10) ? 'green' : 'red'} >Counter: {this.state.counter}</p>
 
         <button onClick={this.onIncrement}>Increment</button>
