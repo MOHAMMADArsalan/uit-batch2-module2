@@ -1,8 +1,11 @@
 import React from "react";
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
-import User from "./pages/Users/User";
+import Users from "./pages/Users/User";
 import NotFound from "./pages/NotFound/NotFound";
+import UserDetail from "./pages/User/User";
+import Login from "./pages/Login/Login";
+import PrivateRoute from "./AppRoutes/PrivateRoute";
 
 //http://github.com/MOHAMMADArsalan/
 
@@ -17,31 +20,14 @@ const Router = (props) => {
   console.log(props);
   return (
     <BrowserRouter>
-      <ul>
-        <li>
-          <NavLink to="/" activeStyle={{
-            color: "blue",
-            fontWeight: "bold",
-          }} exact>Home</NavLink>
-          {/* <NavLink to="/" activeClassName="active" exact>Home</NavLink> */}
-        </li>
-        <li>
-          <NavLink to="/about" activeClassName="active">About</NavLink>
-        </li>
-        <li>
-          <NavLink to="/user" activeClassName="active">User</NavLink>
-        </li>
-      </ul>
       <Switch>
-        <Route path="/" exact>
-          <Home />
-        </Route>
+        <Route path="/" exact component={Login} />
         <Route path="/about">
           <About />
         </Route>
-        <Route path="/user">
-          <User />
-        </Route>
+        <PrivateRoute path="/users" component={Users} />
+        <Route path="/user/:userId" component={UserDetail}/>
+        <PrivateRoute path="/dashboard" component={Home}/>
         <Route>
           <NotFound />
         </Route>
