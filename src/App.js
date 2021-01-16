@@ -55,7 +55,7 @@ class App extends React.Component {
     }
     return (
       <div className="container">
-        <CountDown />
+        <Todo title="Todo App"/>
         {/* {this.state.showCounter ? <Counter2 /> : null} */}
         {/* <h1 style={headingStyle} >Todo App</h1>
         <Input onInputChange={this.onInputChange}/>
