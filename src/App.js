@@ -7,7 +7,7 @@ import Counter from './components/Counter/Counter';
 import Counter2 from './components/Counter2/Counter';
 import Todo from "./components/Todo/Todo";
 import CountDown from "./components/CountDown/CountDown";
-
+import GithubUser from "./pages/GithubUser/GithubUser";
 // create new app
 // https://reactjs.org/docs/create-a-new-react-app.html
 
@@ -55,7 +55,8 @@ class App extends React.Component {
     }
     return (
       <div className="container">
-        <Todo title="Todo App"/>
+        {/* <Todo title="Todo App"/> */}
+        <GithubUser />
         {/* {this.state.showCounter ? <Counter2 /> : null} */}
         {/* <h1 style={headingStyle} >Todo App</h1>
         <Input onInputChange={this.onInputChange}/>

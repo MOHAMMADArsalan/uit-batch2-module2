@@ -1,27 +1,16 @@
-import { createStore } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import reduxThunk from "redux-thunk";
 
-const initialState = {
-  user: {},
-  todos: ["Item 1", "Item 2", "Item 3"],
-  users: [],
-  isLoggedIn: false
-};
-function myReducer (state = initialState, action) {
-  if (action.type === "ADD") {
-    const todos = [...state.todos];
-    todos.push("Item " + (todos.length + 1));
-    return { ...state, todos };
-  } else if (action.type === "EDIT") {
-    const todos = [...state.todos];
-    todos.splice(action.editItem, 1, action.newValue);
-    return { ...state, todos };
-  }
+import { todoReducer } from "./reducers/todoReducer";
+import { userReducer } from "./reducers/userReducer";
 
-  return state;
-}
+const reducers = combineReducers({
+  todo:todoReducer,
+  user: userReducer
+})
 
-
-export const store = createStore(myReducer);
+const middlewares = applyMiddleware(reduxThunk)
+export const store = createStore(reducers, middlewares);
 
 // store.dispatch({
 //   type: "ADD"

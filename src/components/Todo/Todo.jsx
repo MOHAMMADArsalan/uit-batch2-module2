@@ -1,14 +1,14 @@
 import useTodo from "../../hooks/useTodo";
+import { addTodo } from "../../store/actions/todoActions";
 import { connect } from "react-redux";
 
-const Todo = ({ myTodos, dispatch }) => {
-  const { todos, addTodo } = useTodo();
-  console.log(todos, 'todo component');
+const Todo = ({ myTodos, addNewItem }) => {
+  // const { todos, addTodo } = useTodo();
+  // console.log(todos, 'todo component');
 
   const onAddItem = () => {
-    dispatch({
-      type: "ADD"
-    })
+    addNewItem("new Item " + (myTodos.length + 1))
+    // dispatch(addTodo())
   };
   return (
     <div>
@@ -20,13 +20,21 @@ const Todo = ({ myTodos, dispatch }) => {
 };
 
 function mapReduxStateToProps (state) {
-  console.log(state);
+  console.log(state, 'state ------');
 
   return {
-    myTodos: state.todos,
+    myTodos: state.todo.todos,
   };
 }
 
-const myConnect = connect(mapReduxStateToProps);
+function mapDispatchToProps (dispatch) {
+  return {
+    addNewItem: (newItem) => {
+      dispatch(addTodo(newItem))
+    }
+  }
+}
+
+const myConnect = connect(mapReduxStateToProps, mapDispatchToProps);
 const MyTodo = myConnect(Todo);
 export default MyTodo;
