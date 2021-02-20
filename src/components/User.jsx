@@ -52,7 +52,7 @@ const User = () => {
 
       <ul>
         {user.users.map((user, index) => <li key={index}>
-          <p>Name: {user.name}</p>
+          <p>Name: {user.firstName + " " + user.lastName}</p>
           <p>Email: {user.email}</p>
         </li>)}
       </ul>

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Todo from "./components/Todo/Todo";
 import User from "./components/User";
 import Chat from "./pages/Chat/Chat";
 import { ChatProvider } from "./contexts/ChatProvider";
 import { UserProvider } from "./contexts/UserContext";
+import axios from "axios";
 
 const App = () => {
 
