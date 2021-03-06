@@ -21,14 +21,39 @@ export const UserProvider = (props) => {
   const getUserDetails = () => {
     fetch();
   };
+
+  const updateUser = ({ id, ...rest }) => {
+    axios.put(`http://localhost:8000/update-user/${id}`, rest)
+      .then((res) => {
+        const newUsers = [...users];
+        newUsers.splice(id, 1, rest);
+        setUsers(newUsers)
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  };
+
+  const onDeleteUser = (id) => {
+    axios.delete(`http://localhost:8000/delete-user/${id}`)
+      .then((res) => {
+        const newUsers = [...users];
+        newUsers.splice(id, 1);
+        setUsers(newUsers)
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  };
   const userValue = {
     currentUser: currentUser,
     users: users,
     isLoggedIn: false,
-    updateUser: (newUser) => {
-      setCurrentUser(newUser);
-    },
-
+    // updateUser: (newUser) => {
+    //   setCurrentUser(newUser);
+    // },
+    updateUser,
+    onDeleteUser,
     addNewUser: () => {
       const body = {
         firstName: "User",

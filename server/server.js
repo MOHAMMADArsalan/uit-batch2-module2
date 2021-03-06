@@ -1,8 +1,11 @@
 // https://github.com/PegasusWang/books-1/blob/master/express/express-in-action.pdf
 
+//https://www.youtube.com/watch?v=8aGhZQkoFbQ&t=301s
+//http://latentflip.com/
+
 const express = require("express");
 const bodyParser = require("body-parser");
-const cors  = require("cors");
+const cors = require("cors");
 const app = express();
 
 const users = [];
@@ -54,13 +57,32 @@ app.get("/abc", (req, res) => {
 });
 
 app.post("/create-user", (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   users.push(req.body);
   res.send("User Created Successfully");
 });
 
+app.put("/update-user/:userId", (req, res) => {
+  const id = req.params.userId;
+  const body = req.body;
+  const user = {
+    firstName: body.firstName,
+    lastName: body.lastName,
+    email: body.email
+  }
+  users.splice(id, 1, user);
+  res.send("User Updated Successfully");
+});
+app.delete("/delete-user/:userId", (req, res) => {
+  const id = req.params.userId;
+  users.splice(id, 1);
+  res.send("User Delete Successfully");
+});
+
+// app.delete()
+
 app.get("/users", (req, res) => {
   res.send(users);
-})
+});
 
 app.listen(8000);

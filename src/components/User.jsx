@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useUser } from "../contexts/UserContext";
 
 
@@ -36,6 +36,9 @@ import { useUser } from "../contexts/UserContext";
 // export default User;
 
 const User = () => {
+  const [isEdit, setIsEdit] = useState(null);
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
   const user = useUser();
   const updateUser = () => {
     user.updateUser({
@@ -43,6 +46,49 @@ const User = () => {
       email: "user2@gmail.com"
     });
   };
+
+
+  const onEditClick = (index) => {
+    if (index !== null) {
+      const { firstName, lastName, email } = user.users[index];
+      setUserName(`${firstName} ${lastName}`);
+      setUserEmail(email);
+
+    }
+    setIsEdit(index);
+  };
+
+  const onUpdateUser = () => {
+    // const [ firstName, ...othersName] = userName.split(" ") //
+    const fullNames = userName.split(" ") //
+    const firstName = fullNames[0];
+    const othersName = fullNames.slice(1);
+
+    const body = {
+      firstName,
+      lastName: othersName.join(" "),
+      email: userEmail,
+      id: isEdit
+    }
+
+    user.updateUser(body)
+    setIsEdit(null);
+  }
+
+  const onUserNameChange = (event) => {
+    const value = event.target.value;
+    setUserName(value);
+  };
+
+  const onUserEmailChange = (event) => {
+    const value = event.target.value;
+    setUserEmail(value);
+  };
+  console.log(userName);
+
+  const onDeleteUser = (index) => {
+    user.onDeleteUser(index);
+  }
   return (
     <div>
       <h1>User Page</h1>
@@ -52,8 +98,13 @@ const User = () => {
 
       <ul>
         {user.users.map((user, index) => <li key={index}>
-          <p>Name: {user.firstName + " " + user.lastName}</p>
-          <p>Email: {user.email}</p>
+          <p>Name: {isEdit === index ? <input value={userName} onChange={onUserNameChange} /> : user.firstName + " " + user.lastName}</p>
+          <p>Email: {isEdit === index ? <input value={userEmail} onChange={onUserEmailChange} /> : user.email}</p>
+          <p>Action:
+            <button onClick={() => onDeleteUser(index)}>Delete</button>
+           {isEdit !== index ? <button onClick={() => onEditClick(index)}>Edit</button> :
+              <button onClick={onUpdateUser}>Update</button>}
+            {isEdit === index && <button onClick={() => onEditClick(null)}>Cancel</button>}</p>
         </li>)}
       </ul>
       <button onClick={user.addNewUser}>Add User</button>
