@@ -3,11 +3,19 @@
 //https://www.youtube.com/watch?v=8aGhZQkoFbQ&t=301s
 //http://latentflip.com/
 
+// https://drive.google.com/drive/folders/1kwQVEUiKdaM7-6zocvgtBoE8GnkKxZXQ?usp=sharing
+// https://drive.google.com/drive/folders/16x0xnUTgY7HSgp2toWYoM4awjQFX62W1?usp=sharing
+// https://drive.google.com/drive/folders/1O4MY2e0M_WPQ4CJUigTl3hzAplVavY9S?usp=sharing
+
+
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
+const userModel = require("./user/model");
 
+const url = "mongodb+srv://<username>:<password>@uit-cluster.f1v1v.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const users = [];
 
 app.use(cors("*"));
@@ -17,6 +25,13 @@ app.use(cors("*"));
 //   next();
 // })
 app.use(bodyParser.json());
+
+mongoose.connect(url, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+  .then(() => console.log("Databased connected"))
+  .catch((error) => console.log(error));
 
 app.get("/", (req, res) => {
   res.send("Hello from / URL");
@@ -59,7 +74,21 @@ app.get("/abc", (req, res) => {
 app.post("/create-user", (req, res) => {
   console.log(req.body);
   users.push(req.body);
-  res.send("User Created Successfully");
+  const { firstName, lastName, email, password, age } = req.body;
+  const body = {
+    firstName,
+    lastName,
+    email,
+    password,
+    age,
+    createdAt: Date.now(),
+    isVerified: false
+  }
+  userModel.create(body)
+    .then(() => {
+      res.send("User Created Successfully");
+    })
+    .catch(() => res.send("Failed to create user"));
 });
 
 app.put("/update-user/:userId", (req, res) => {
@@ -69,7 +98,7 @@ app.put("/update-user/:userId", (req, res) => {
     firstName: body.firstName,
     lastName: body.lastName,
     email: body.email
-  }
+  };
   users.splice(id, 1, user);
   res.send("User Updated Successfully");
 });
@@ -82,7 +111,71 @@ app.delete("/delete-user/:userId", (req, res) => {
 // app.delete()
 
 app.get("/users", (req, res) => {
-  res.send(users);
+  userModel.find()
+    .then((users) => res.send(users))
+    .catch(() => res.send("Failed to fetch users"));
+
 });
 
+app.get("/user/:id", (req, res) => {
+  const id = req.params.id;
+  userModel.findById(id)
+  .then((user) => {
+    if(user) {
+      res.send(user)
+    } else {
+      res.send("User Not Found.")
+    }
+  })
+  .catch(() => res.send("Failed to fetch user"))
+})
+
 app.listen(8000);
+
+
+
+// sql
+// no-sql
+
+// table
+// row
+// column
+
+
+// const user = {
+//   firstName: "",
+//   lastName: "",
+//   email: "",
+//   password: ""
+// }
+
+// collections
+// document
+//field
+
+/* [
+  {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  }
+]*/
+
+
+// user table
+// |primary id |firstName| lastName | email | Password   
+// |   10        | user     | 1       |u@g.com | 9384798g 
+
+// 
+
+// friends table
+// |primary id |firstName| lastName | email | Password   | foreign
+// |   1        | user     | 1       |u@g.com | 9384798g | 10
+
+//
+
+
+// Mongo DB
+// no sql -> collections -> document -> fields
+// javascript
