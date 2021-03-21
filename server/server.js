@@ -12,10 +12,14 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const dotEnv = require("dotenv");
 const app = express();
 const userModel = require("./user/model");
 
-const url = "mongodb+srv://<username>:<password>@uit-cluster.f1v1v.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+dotEnv.config()
+// console.log(process.env);
+const url = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASSWORD}@cluster0.642ww.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
+// const url = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASSWORD}@uit-cluster.f1v1v.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const users = [];
 
 app.use(cors("*"));
@@ -81,14 +85,15 @@ app.post("/create-user", (req, res) => {
     email,
     password,
     age,
-    createdAt: Date.now(),
-    isVerified: false
   }
   userModel.create(body)
     .then(() => {
       res.send("User Created Successfully");
     })
-    .catch(() => res.send("Failed to create user"));
+    .catch((error) => {
+      console.log(error.errors)
+      res.send("Failed to create user")
+    });
 });
 
 app.put("/update-user/:userId", (req, res) => {
@@ -128,6 +133,26 @@ app.get("/user/:id", (req, res) => {
     }
   })
   .catch(() => res.send("Failed to fetch user"))
+})
+
+app.delete('/user', (req, res) => {
+  const userId = req.body.id;
+
+  userModel.findByIdAndRemove(userId)
+  .then(() => res.send("User Deleted Successfully"))
+  .catch(() => res.send("Failed to delete user"));
+})
+
+
+app.put('/user/:id', (req, res) => {
+  const user = req.body;
+  const id = req.params.id;
+
+  userModel.findByIdAndUpdate(id, user)
+  .then(() => res.send("User Updated Successfully"))
+  .catch(() => res.send("Failed to update user"));
+
+
 })
 
 app.listen(8000);
