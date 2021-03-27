@@ -14,7 +14,10 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const dotEnv = require("dotenv");
 const app = express();
+
 const userModel = require("./user/model");
+const userController = require("./user/controller");
+
 
 dotEnv.config()
 // console.log(process.env);
@@ -154,6 +157,11 @@ app.put('/user/:id', (req, res) => {
 
 
 })
+
+// sign up route
+
+app.post('/signup', userController.signup);
+app.post("/login", userController.login);
 
 app.listen(8000);
 
